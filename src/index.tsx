@@ -632,6 +632,7 @@ app.get('/', (c) => {
             .result-reading p {
                 margin-bottom: 16px;
                 line-height: 1.8;
+                color: #FFFFFF;
             }
             
             .result-reading ul {
@@ -643,6 +644,7 @@ app.get('/', (c) => {
                 margin-bottom: 12px;
                 padding-left: 8px;
                 position: relative;
+                color: #FFFFFF;
             }
             
             .result-reading li::before {
