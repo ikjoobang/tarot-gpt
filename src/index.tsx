@@ -111,7 +111,7 @@ app.get('/api/cards', (c) => {
   return c.json(tarotCards)
 })
 
-// API 엔드포인트: 타로 리딩 (GPT 연동)
+// API 엔드포인트: 타로 리딩 (GPT-4o-mini 연동)
 app.post('/api/reading', async (c) => {
   try {
     const { cards, question, spread } = await c.req.json()
@@ -125,34 +125,86 @@ app.post('/api/reading', async (c) => {
     })
 
     const cardDescriptions = cards.map((card: any, index: number) => 
-      `${index + 1}. ${card.name} (${card.keywords})`
-    ).join('\n')
+      `${index + 1}번 카드: ${card.name}
+   - 키워드: ${card.keywords}
+   - 수트: ${card.suit}
+   - 위치: ${spread === 'single' ? '현재' : spread === 'three-card' ? ['과거', '현재', '미래'][index] : `포지션 ${index + 1}`}`
+    ).join('\n\n')
 
-    const systemPrompt = `당신은 30년 경력의 전문 타로 리더입니다. 
-사용자의 질문과 뽑힌 카드를 바탕으로 깊이 있고 구체적인 해석을 제공합니다.
-해석은 다음 구조로 작성하세요:
+    const systemPrompt = `당신은 30년 경력의 전문 타로 마스터이자 심리 상담가입니다.
 
-1. **전체적인 메시지** (2-3문장)
-2. **각 카드의 의미** (각 카드마다 구체적 해석)
-3. **실천 조언** (구체적이고 실용적인 조언)
+3,000장 분량의 타로 해석 데이터베이스를 바탕으로, 각 카드의 깊은 상징과 의미를 이해하고 있습니다.
 
-따뜻하고 공감적인 톤으로 작성하되, 명확하고 구체적으로 답변하세요.`
+당신의 해석은:
+- 각 카드의 역사적, 신화적 배경을 포함
+- 심리학적 관점에서의 해석
+- 실생활에 적용 가능한 구체적인 조언
+- 타임라인별 상세한 전망
+- 주의사항과 극복 방법
 
-    const userPrompt = `질문: ${question || '일반적인 운세를 알려주세요'}
-스프레드: ${spread}
-뽑힌 카드:
+반드시 다음 구조로 작성하세요:
+
+## 🔮 전체 운세의 흐름
+
+(3-4문단으로 전체적인 에너지와 메시지를 설명)
+
+## 📖 각 카드 상세 해석
+
+### [카드 위치]: [카드 이름]
+
+**상징과 의미**
+(2-3문단: 카드의 깊은 상징, 신화적 배경, 전통적 해석)
+
+**현재 상황에서의 메시지**
+(2-3문단: 질문과 연결하여 구체적으로 해석)
+
+**심리적 관점**
+(1-2문단: 내면의 상태, 감정, 무의식적 패턴)
+
+## 💡 실천 가능한 조언
+
+**즉시 실행 가능한 행동**
+- 구체적인 액션 아이템 3-5개
+- 각 항목마다 상세한 설명 포함
+
+**장기적 관점의 조언**
+- 앞으로 1개월, 3개월, 6개월의 전망
+- 각 시기별 주의사항과 기회
+
+## ⚠️ 주의사항
+
+(피해야 할 것들과 그 이유를 상세히 설명)
+
+## 🌟 긍정적 변화를 위한 제안
+
+(구체적이고 실천 가능한 3-5가지 제안)
+
+---
+
+최소 A4 용지 1장 분량(약 1,500-2,000자)으로 작성하되, 각 섹션을 명확히 구분하고 가독성 있게 작성하세요.
+따뜻하고 공감적이면서도 전문적인 톤을 유지하세요.`
+
+    const userPrompt = `
+질문자의 고민: "${question}"
+
+스프레드 방식: ${spread === 'single' ? '원 카드 리딩 (현재 에너지 집중)' : '쓰리 카드 스프레드 (과거-현재-미래)'}
+
+뽑힌 카드 정보:
 ${cardDescriptions}
 
-위 카드들을 바탕으로 타로 리딩을 해주세요.`
+---
+
+위 카드들을 바탕으로 질문자에게 깊이 있고 상세한 타로 리딩을 제공해주세요.
+각 카드의 상징과 의미를 충분히 설명하고, 실생활에 적용 가능한 구체적인 조언을 포함해주세요.`
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }
       ],
       temperature: 0.8,
-      max_tokens: 1000
+      max_tokens: 3000
     })
 
     const reading = completion.choices[0].message.content
@@ -189,7 +241,7 @@ app.get('/health', (c) => {
   })
 })
 
-// 메인 페이지 - GenSpark 스타일
+// 메인 페이지
 app.get('/', (c) => {
   return c.html(`
     <!DOCTYPE html>
@@ -197,7 +249,7 @@ app.get('/', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>🔮 AI 타로 리딩</title>
+        <title>🔮 Studiojuai Tarot</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -230,18 +282,21 @@ app.get('/', (c) => {
             }
             
             .header h1 {
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: 700;
                 background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
-                margin-bottom: 4px;
+                margin-bottom: 8px;
+                line-height: 1.4;
             }
             
             .header p {
                 font-size: 12px;
                 color: #CCCCCC;
+                line-height: 1.5;
+                margin-bottom: 2px;
             }
             
             .section {
@@ -313,7 +368,7 @@ app.get('/', (c) => {
             
             .spread-icon {
                 display: block;
-                font-size: 20px;
+                font-size: 24px;
                 margin-bottom: 4px;
             }
             
@@ -344,9 +399,12 @@ app.get('/', (c) => {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 20px;
+                flex-direction: column;
+                font-size: 16px;
                 cursor: pointer;
                 transition: all 0.2s;
+                padding: 4px;
+                text-align: center;
             }
             
             .card-item:hover {
@@ -357,6 +415,17 @@ app.get('/', (c) => {
             .card-item.selected {
                 border-color: #FF6B35;
                 background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            }
+            
+            .card-back {
+                font-size: 20px;
+            }
+            
+            .card-front {
+                font-size: 8px;
+                color: #FFFFFF;
+                word-break: keep-all;
+                line-height: 1.2;
             }
             
             .btn {
@@ -453,12 +522,36 @@ app.get('/', (c) => {
                 border-radius: 8px;
                 padding: 16px;
                 font-size: 14px;
-                line-height: 1.6;
+                line-height: 1.8;
                 color: #CCCCCC;
+                max-height: 600px;
+                overflow-y: auto;
+            }
+            
+            .result-reading h2 {
+                color: #FF6B35;
+                font-size: 16px;
+                font-weight: 700;
+                margin: 16px 0 12px 0;
+                padding-top: 12px;
+                border-top: 1px solid #333333;
+            }
+            
+            .result-reading h2:first-child {
+                margin-top: 0;
+                padding-top: 0;
+                border-top: none;
+            }
+            
+            .result-reading h3 {
+                color: #FF8C42;
+                font-size: 14px;
+                font-weight: 600;
+                margin: 12px 0 8px 0;
             }
             
             .result-reading strong {
-                color: #FF6B35;
+                color: #FFFFFF;
                 font-weight: 600;
             }
             
@@ -466,8 +559,12 @@ app.get('/', (c) => {
                 margin-bottom: 12px;
             }
             
-            .result-reading p:last-child {
-                margin-bottom: 0;
+            .result-reading ul {
+                margin: 8px 0 12px 20px;
+            }
+            
+            .result-reading li {
+                margin-bottom: 6px;
             }
             
             .loading-overlay {
@@ -507,6 +604,29 @@ app.get('/', (c) => {
                 display: none;
             }
             
+            .footer {
+                text-align: center;
+                padding: 20px 16px;
+                border-top: 1px solid #333333;
+                margin-top: 20px;
+            }
+            
+            .footer-links {
+                font-size: 12px;
+                color: #CCCCCC;
+                line-height: 1.6;
+            }
+            
+            .footer-links a {
+                color: #FF6B35;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+            
+            .footer-links a:hover {
+                color: #FF8C42;
+            }
+            
             @media (max-width: 480px) {
                 .deck-grid {
                     grid-template-columns: repeat(5, 1fr);
@@ -526,8 +646,9 @@ app.get('/', (c) => {
         <div class="container">
             <!-- 헤더 -->
             <header class="header">
-                <h1>🔮 AI 타로 리딩</h1>
-                <p>GPT가 해석하는 당신의 운명</p>
+                <h1>🔮 Studiojuai_Tarot_타로</h1>
+                <p>AI + 3,000장 분량의 프롬프트를</p>
+                <p>78장 타로 카드로 해석하는 노하우</p>
             </header>
 
             <!-- 질문 입력 -->
@@ -537,7 +658,8 @@ app.get('/', (c) => {
                     id="question-input" 
                     class="input-field"
                     placeholder="예: 나의 연애운은 어떤가요?
-예: 이직을 해도 될까요?"
+예: 이직을 해도 될까요?
+예: 사업은 잘 될까요?"
                     rows="3"
                 ></textarea>
             </section>
@@ -547,12 +669,12 @@ app.get('/', (c) => {
                 <h2 class="section-title">리딩 방식 선택</h2>
                 <div class="spread-options">
                     <button class="spread-btn active" data-spread="single" data-count="1">
-                        <span class="spread-icon">🃏</span>
+                        <span class="spread-icon">🎴</span>
                         <span class="spread-name">원 카드</span>
                         <span class="spread-desc">간단한 질문</span>
                     </button>
                     <button class="spread-btn" data-spread="three-card" data-count="3">
-                        <span class="spread-icon">🎴</span>
+                        <span class="spread-icon">🃏</span>
                         <span class="spread-name">쓰리 카드</span>
                         <span class="spread-desc">과거-현재-미래</span>
                     </button>
@@ -580,8 +702,18 @@ app.get('/', (c) => {
                 </div>
                 <div id="result-cards" class="selected-cards" style="margin-bottom: 12px;"></div>
                 <div id="result-reading" class="result-reading"></div>
-                <button onclick="location.reload()" class="btn btn-secondary" style="margin-top: 12px;">다시 점보기</button>
+                <button onclick="location.reload()" class="btn btn-secondary" style="margin-top: 12px;">다시 타로 보기</button>
             </section>
+
+            <!-- 푸터 -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://www.studiojuai.com" target="_blank">https://www.studiojuai.com</a><br>
+                    <a href="https://twitter.com/STUDIO_JU_AI" target="_blank">@STUDIO_JU_AI</a><br>
+                    © 2025. ALL RIGHTS RESERVED.<br>
+                    <a href="mailto:ikjoobang@gmail.com">ikjoobang@gmail.com</a>
+                </div>
+            </footer>
         </div>
 
         <script>
@@ -650,7 +782,7 @@ app.get('/', (c) => {
                     const cardElement = document.createElement('div');
                     cardElement.className = 'card-item';
                     cardElement.dataset.cardId = card.id;
-                    cardElement.innerHTML = '🔮';
+                    cardElement.innerHTML = '<div class="card-back">🔮</div>';
                     
                     cardElement.addEventListener('click', () => selectCard(card, cardElement));
                     
@@ -664,6 +796,7 @@ app.get('/', (c) => {
                 
                 selectedCards.push(card);
                 element.classList.add('selected');
+                element.innerHTML = \`<div class="card-front">\${card.name}</div>\`;
                 
                 updateCardCounter();
                 
@@ -712,7 +845,7 @@ app.get('/', (c) => {
                 }
                 
                 try {
-                    showLoading('AI가 타로를 해석하는 중...');
+                    showLoading('AI가 타로를 해석하는 중...(약 30초 소요)');
                     
                     const response = await fetch('/api/reading', {
                         method: 'POST',
@@ -772,10 +905,18 @@ app.get('/', (c) => {
 
             function formatReading(text) {
                 return text
+                    .replace(/##\\s/g, '<h2>')
+                    .replace(/###\\s/g, '<h3>')
+                    .replace(/\\n(?=##)/g, '</h2>')
+                    .replace(/\\n(?=###)/g, '</h3>')
                     .replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>')
+                    .replace(/^-\\s/gm, '<li>')
                     .replace(/\\n\\n/g, '</p><p>')
                     .replace(/^/, '<p>')
-                    .replace(/$/, '</p>');
+                    .replace(/$/, '</p>')
+                    .replace(/<p><li>/g, '<ul><li>')
+                    .replace(/<\\/p>\\n<p><li>/g, '</li><li>')
+                    .replace(/<li>(.*?)<\\/p>/g, '<li>$1</li></ul>');
             }
 
             function showLoading(text) {
