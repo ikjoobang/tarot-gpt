@@ -556,22 +556,23 @@ app.get('/', (c) => {
                 background: #000000;
                 border: 1px solid #333333;
                 border-radius: 8px;
-                padding: 16px;
+                padding: 20px;
                 font-size: 17px;
-                line-height: 1.7;
+                line-height: 1.8;
                 letter-spacing: -0.02em;
                 color: #CCCCCC;
-                max-height: 600px;
+                max-height: 800px;
                 overflow-y: auto;
             }
             
             @media (min-width: 769px) {
                 .result-reading {
                     font-size: 16px;
-                    line-height: 1.6;
+                    line-height: 1.8;
                     letter-spacing: -0.01em;
-                    padding: 24px 32px;
-                    max-width: 720px;
+                    padding: 32px 40px;
+                    max-width: 900px;
+                    max-height: none;
                     margin: 0 auto;
                 }
             }
@@ -580,8 +581,8 @@ app.get('/', (c) => {
                 color: #FF6B35;
                 font-size: 18px;
                 font-weight: 700;
-                margin: 24px 0 16px 0;
-                padding-top: 16px;
+                margin: 32px 0 20px 0;
+                padding-top: 24px;
                 border-top: 1px solid #333333;
             }
             
@@ -595,17 +596,31 @@ app.get('/', (c) => {
                 color: #FF8C42;
                 font-size: 16px;
                 font-weight: 600;
-                margin: 16px 0 12px 0;
+                margin: 24px 0 16px 0;
             }
             
             @media (min-width: 769px) {
                 .result-reading h2 {
-                    font-size: 20px;
-                    margin: 32px 0 20px 0;
+                    font-size: 22px;
+                    margin: 48px 0 24px 0;
+                    padding-top: 32px;
                 }
                 
                 .result-reading h3 {
-                    font-size: 17px;
+                    font-size: 18px;
+                    margin: 28px 0 18px 0;
+                }
+                
+                .result-reading p {
+                    margin-bottom: 20px;
+                }
+                
+                .result-reading ul {
+                    margin: 16px 0 24px 28px;
+                }
+                
+                .result-reading li {
+                    margin-bottom: 16px;
                 }
             }
             
@@ -615,15 +630,27 @@ app.get('/', (c) => {
             }
             
             .result-reading p {
-                margin-bottom: 12px;
+                margin-bottom: 16px;
+                line-height: 1.8;
             }
             
             .result-reading ul {
-                margin: 8px 0 12px 20px;
+                margin: 12px 0 20px 24px;
+                list-style-type: none;
             }
             
             .result-reading li {
-                margin-bottom: 6px;
+                margin-bottom: 12px;
+                padding-left: 8px;
+                position: relative;
+            }
+            
+            .result-reading li::before {
+                content: "•";
+                position: absolute;
+                left: -16px;
+                color: #FF6B35;
+                font-weight: bold;
             }
             
             .loading-overlay {
