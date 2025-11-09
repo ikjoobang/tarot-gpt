@@ -560,7 +560,7 @@ app.get('/', (c) => {
                 font-size: 17px;
                 line-height: 1.8;
                 letter-spacing: -0.02em;
-                color: #CCCCCC;
+                color: #FFFFFF;
                 max-height: 800px;
                 overflow-y: auto;
             }
@@ -593,7 +593,7 @@ app.get('/', (c) => {
             }
             
             .result-reading h3 {
-                color: #FF8C42;
+                color: #FF6B35;
                 font-size: 16px;
                 font-weight: 600;
                 margin: 24px 0 16px 0;
