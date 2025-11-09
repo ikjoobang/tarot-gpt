@@ -18,7 +18,7 @@ app.use('/static/*', serveStatic({ root: './' }))
 // 타로 카드 데이터 (78장 전체)
 const tarotCards = [
   // 메이저 아르카나 (0-21)
-  { id: 0, name: "바보(The Fool)", image: "00-fool.jpg", suit: "major", keywords: "새로운 시작, 순수함, 자유" },
+  { id: 0, name: "바보(The Fool)", image: "00-fool.jpg", suit: "major", emoji: "⭐", keywords: "새로운 시작, 순수함, 자유" },
   { id: 1, name: "마법사(The Magician)", image: "01-magician.jpg", suit: "major", keywords: "창조력, 의지력, 기술" },
   { id: 2, name: "여사제(The High Priestess)", image: "02-high-priestess.jpg", suit: "major", keywords: "직관, 신비, 잠재의식" },
   { id: 3, name: "여황제(The Empress)", image: "03-empress.jpg", suit: "major", keywords: "풍요, 모성, 창조성" },
@@ -773,6 +773,30 @@ app.get('/', (c) => {
                 startReadingBtn.addEventListener('click', startReading);
             }
 
+            // 수트별 이모지 반환
+            function getSuitEmoji(suit) {
+                const emojiMap = {
+                    'major': '⭐',
+                    'wands': '🔥',
+                    'cups': '💧',
+                    'swords': '⚔️',
+                    'pentacles': '💰'
+                };
+                return emojiMap[suit] || '🔮';
+            }
+
+            // 수트별 색상 반환
+            function getSuitGradient(suit) {
+                const gradientMap = {
+                    'major': 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
+                    'wands': 'linear-gradient(135deg, #FF6B35 0%, #FF4500 100%)',
+                    'cups': 'linear-gradient(135deg, #4169E1 0%, #1E90FF 100%)',
+                    'swords': 'linear-gradient(135deg, #708090 0%, #A9A9A9 100%)',
+                    'pentacles': 'linear-gradient(135deg, #228B22 0%, #32CD32 100%)'
+                };
+                return gradientMap[suit] || 'linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%)';
+            }
+
             function renderDeck() {
                 deckContainer.innerHTML = '';
                 
@@ -796,7 +820,17 @@ app.get('/', (c) => {
                 
                 selectedCards.push(card);
                 element.classList.add('selected');
-                element.innerHTML = \`<div class="card-front">\${card.name}</div>\`;
+                
+                const emoji = getSuitEmoji(card.suit);
+                const gradient = getSuitGradient(card.suit);
+                
+                element.style.background = gradient;
+                element.innerHTML = \`
+                    <div class="card-front">
+                        <div style="font-size: 24px; margin-bottom: 4px;">\${emoji}</div>
+                        <div style="font-size: 9px; font-weight: 600; line-height: 1.2;">\${card.name}</div>
+                    </div>
+                \`;
                 
                 updateCardCounter();
                 
@@ -818,9 +852,10 @@ app.get('/', (c) => {
                 selectedCards.forEach((card, index) => {
                     const cardDiv = document.createElement('div');
                     cardDiv.className = 'selected-card';
+                    const emoji = getSuitEmoji(card.suit);
                     cardDiv.innerHTML = \`
                         <div class="card-position">\${getPositionName(index)}</div>
-                        <div class="card-name">\${card.name}</div>
+                        <div class="card-name">\${emoji} \${card.name}</div>
                         <div class="card-keywords">\${card.keywords}</div>
                     \`;
                     selectedCardsContainer.appendChild(cardDiv);
@@ -889,9 +924,10 @@ app.get('/', (c) => {
                 result.cards.forEach((card, index) => {
                     const cardDiv = document.createElement('div');
                     cardDiv.className = 'selected-card';
+                    const emoji = getSuitEmoji(card.suit);
                     cardDiv.innerHTML = \`
                         <div class="card-position">\${getPositionName(index)}</div>
-                        <div class="card-name">\${card.name}</div>
+                        <div class="card-name">\${emoji} \${card.name}</div>
                         <div class="card-keywords">\${card.keywords}</div>
                     \`;
                     resultCardsContainer.appendChild(cardDiv);
