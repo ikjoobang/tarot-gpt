@@ -144,40 +144,62 @@ app.post('/api/reading', async (c) => {
 
 반드시 다음 구조로 작성하세요:
 
-## 🔮 전체 운세의 흐름
+## ❶ 전체 운세의 흐름
 
-(3-4문단으로 전체적인 에너지와 메시지를 설명)
+3-4개 문단으로 전체적인 에너지와 메시지를 설명합니다.
 
-## 📖 각 카드 상세 해석
+• 한 문단은 3-4줄로 구성
+• 핵심 메시지는 **굵게** 강조
+• 각 문단 사이에 빈 줄 추가
 
-### [카드 위치]: [카드 이름]
+## ❷ 각 카드 상세 해석
 
-**상징과 의미**
-(2-3문단: 카드의 깊은 상징, 신화적 배경, 전통적 해석)
+### ■ [카드 위치]: [카드 이름]
 
-**현재 상황에서의 메시지**
-(2-3문단: 질문과 연결하여 구체적으로 해석)
+**✦ 상징과 의미**
 
-**심리적 관점**
-(1-2문단: 내면의 상태, 감정, 무의식적 패턴)
+2-3문단으로 카드의 깊은 상징, 신화적 배경, 전통적 해석을 설명합니다.
 
-## 💡 실천 가능한 조언
+**✦ 현재 상황에서의 메시지**
 
-**즉시 실행 가능한 행동**
-- 구체적인 액션 아이템 3-5개
-- 각 항목마다 상세한 설명 포함
+2-3문단으로 질문과 연결하여 구체적으로 해석합니다.
 
-**장기적 관점의 조언**
-- 앞으로 1개월, 3개월, 6개월의 전망
-- 각 시기별 주의사항과 기회
+**✦ 심리적 관점**
 
-## ⚠️ 주의사항
+1-2문단으로 내면의 상태, 감정, 무의식적 패턴을 분석합니다.
 
-(피해야 할 것들과 그 이유를 상세히 설명)
+## ❸ 실천 가능한 조언
 
-## 🌟 긍정적 변화를 위한 제안
+### ✔️ 즉시 실행 가능한 행동
 
-(구체적이고 실천 가능한 3-5가지 제안)
+• 구체적인 액션 아이템 1
+• 구체적인 액션 아이템 2
+• 구체적인 액션 아이템 3
+
+각 항목은 한 줄로 간결하게, 바로 실천 가능해야 합니다.
+
+### → 장기적 관점의 조언
+
+**1개월 후**
+(구체적인 전망과 조언)
+
+**3개월 후**
+(구체적인 전망과 조언)
+
+**6개월 후**
+(구체적인 전망과 조언)
+
+## ❹ 주의사항
+
+• 주의사항 1 (이유와 함께)
+• 주의사항 2 (이유와 함께)
+• 주의사항 3 (이유와 함께)
+
+## ❺ 긍정적 변화를 위한 제안
+
+• 제안 1 (구체적이고 실천 가능하게)
+• 제안 2 (구체적이고 실천 가능하게)
+• 제안 3 (구체적이고 실천 가능하게)
 
 ---
 
@@ -272,6 +294,20 @@ app.get('/', (c) => {
                 max-width: 400px;
                 margin: 0 auto;
                 padding: 20px 16px;
+            }
+            
+            @media (min-width: 481px) and (max-width: 768px) {
+                .container {
+                    max-width: 600px;
+                    padding: 24px 32px;
+                }
+            }
+            
+            @media (min-width: 769px) {
+                .container {
+                    max-width: 800px;
+                    padding: 32px 40px;
+                }
             }
             
             .header {
@@ -521,19 +557,31 @@ app.get('/', (c) => {
                 border: 1px solid #333333;
                 border-radius: 8px;
                 padding: 16px;
-                font-size: 14px;
-                line-height: 1.8;
+                font-size: 17px;
+                line-height: 1.7;
+                letter-spacing: -0.02em;
                 color: #CCCCCC;
                 max-height: 600px;
                 overflow-y: auto;
             }
             
+            @media (min-width: 769px) {
+                .result-reading {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    letter-spacing: -0.01em;
+                    padding: 24px 32px;
+                    max-width: 720px;
+                    margin: 0 auto;
+                }
+            }
+            
             .result-reading h2 {
                 color: #FF6B35;
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: 700;
-                margin: 16px 0 12px 0;
-                padding-top: 12px;
+                margin: 24px 0 16px 0;
+                padding-top: 16px;
                 border-top: 1px solid #333333;
             }
             
@@ -545,9 +593,20 @@ app.get('/', (c) => {
             
             .result-reading h3 {
                 color: #FF8C42;
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: 600;
-                margin: 12px 0 8px 0;
+                margin: 16px 0 12px 0;
+            }
+            
+            @media (min-width: 769px) {
+                .result-reading h2 {
+                    font-size: 20px;
+                    margin: 32px 0 20px 0;
+                }
+                
+                .result-reading h3 {
+                    font-size: 17px;
+                }
             }
             
             .result-reading strong {
@@ -629,8 +688,32 @@ app.get('/', (c) => {
             
             @media (max-width: 480px) {
                 .deck-grid {
-                    grid-template-columns: repeat(5, 1fr);
+                    grid-template-columns: repeat(6, 1fr);
                 }
+            }
+            
+            @media (min-width: 481px) and (max-width: 768px) {
+                .deck-grid {
+                    grid-template-columns: repeat(8, 1fr);
+                }
+            }
+            
+            @media (min-width: 769px) {
+                .deck-grid {
+                    grid-template-columns: repeat(12, 1fr);
+                }
+            }
+            
+            .download-buttons {
+                display: flex;
+                gap: 8px;
+                margin-top: 12px;
+            }
+            
+            .download-buttons .btn {
+                flex: 1;
+                font-size: 13px;
+                padding: 8px 16px;
             }
         </style>
     </head>
@@ -702,7 +785,11 @@ app.get('/', (c) => {
                 </div>
                 <div id="result-cards" class="selected-cards" style="margin-bottom: 12px;"></div>
                 <div id="result-reading" class="result-reading"></div>
-                <button onclick="location.reload()" class="btn btn-secondary" style="margin-top: 12px;">다시 타로 보기</button>
+                <div class="download-buttons">
+                    <button onclick="location.reload()" class="btn btn-secondary">다시 타로 보기</button>
+                    <button onclick="downloadTXT()" class="btn btn-secondary">TXT 다운 📄</button>
+                    <button onclick="downloadImage()" class="btn btn-secondary">이미지 저장 🖼️</button>
+                </div>
             </section>
 
             <!-- 푸터 -->
@@ -962,6 +1049,77 @@ app.get('/', (c) => {
 
             function hideLoading() {
                 loadingOverlay.classList.add('hidden');
+            }
+
+            // TXT 다운로드
+            function downloadTXT() {
+                const question = document.getElementById('result-question-text').textContent;
+                const reading = document.getElementById('result-reading').innerText;
+                const cardInfo = Array.from(document.querySelectorAll('#result-cards .selected-card')).map(card => {
+                    const position = card.querySelector('.card-position').textContent;
+                    const name = card.querySelector('.card-name').textContent;
+                    const keywords = card.querySelector('.card-keywords').textContent;
+                    return \`\${position}: \${name}\\n키워드: \${keywords}\`;
+                }).join('\\n\\n');
+                
+                const content = \`🔮 Studiojuai Tarot 타로 리딩 결과
+                
+날짜: \${new Date().toLocaleString('ko-KR')}
+
+질문: \${question}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 선택하신 카드
+
+\${cardInfo}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+\${reading}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+© 2025 STUDIO_JU_AI
+https://www.studiojuai.com
+ikjoobang@gmail.com\`;
+                
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = \`타로리딩_\${new Date().getTime()}.txt\`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+            
+            // 이미지 다운로드
+            function downloadImage() {
+                const resultSection = document.getElementById('result-section');
+                
+                // html2canvas 라이브러리 동적 로드
+                if (!window.html2canvas) {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+                    script.onload = () => captureAndDownload();
+                    document.head.appendChild(script);
+                } else {
+                    captureAndDownload();
+                }
+                
+                function captureAndDownload() {
+                    html2canvas(resultSection, {
+                        backgroundColor: '#000000',
+                        scale: 2,
+                        logging: false
+                    }).then(canvas => {
+                        const url = canvas.toDataURL('image/png');
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = \`타로리딩_\${new Date().getTime()}.png\`;
+                        a.click();
+                    });
+                }
             }
 
             window.addEventListener('DOMContentLoaded', init);
