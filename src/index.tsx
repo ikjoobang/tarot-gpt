@@ -298,15 +298,15 @@ app.get('/', (c) => {
             
             @media (min-width: 481px) and (max-width: 768px) {
                 .container {
-                    max-width: 600px;
+                    max-width: 700px;
                     padding: 24px 32px;
                 }
             }
             
             @media (min-width: 769px) {
                 .container {
-                    max-width: 800px;
-                    padding: 32px 40px;
+                    max-width: 1200px;
+                    padding: 40px 60px;
                 }
             }
             
@@ -700,7 +700,25 @@ app.get('/', (c) => {
             
             @media (min-width: 769px) {
                 .deck-grid {
-                    grid-template-columns: repeat(12, 1fr);
+                    grid-template-columns: repeat(13, 1fr);
+                }
+                
+                .section-title {
+                    font-size: 16px;
+                }
+                
+                .input-field {
+                    font-size: 15px;
+                    padding: 14px 16px;
+                }
+                
+                .spread-btn {
+                    padding: 16px;
+                    font-size: 15px;
+                }
+                
+                .spread-icon {
+                    font-size: 32px;
                 }
             }
             
@@ -714,6 +732,13 @@ app.get('/', (c) => {
                 flex: 1;
                 font-size: 13px;
                 padding: 8px 16px;
+            }
+            
+            @media (min-width: 769px) {
+                .download-buttons .btn {
+                    font-size: 14px;
+                    padding: 10px 20px;
+                }
             }
         </style>
     </head>
