@@ -41,7 +41,7 @@ const tarotCards = [
   { id: 20, name: "심판(Judgement)", image: "20-judgement.jpg", suit: "major", keywords: "부활, 결정, 평가" },
   { id: 21, name: "세계(The World)", image: "21-world.jpg", suit: "major", keywords: "완성, 성취, 통합" },
 
-  // 완드(Wands) 수트 - 불의 원소
+  // 완드(Wands) 수트
   { id: 22, name: "완드 에이스", image: "wands-01.jpg", suit: "wands", keywords: "창조적 에너지, 새로운 프로젝트" },
   { id: 23, name: "완드 2", image: "wands-02.jpg", suit: "wands", keywords: "계획, 미래 전망" },
   { id: 24, name: "완드 3", image: "wands-03.jpg", suit: "wands", keywords: "확장, 전망" },
@@ -57,7 +57,7 @@ const tarotCards = [
   { id: 34, name: "완드 퀸", image: "wands-queen.jpg", suit: "wands", keywords: "자신감, 독립" },
   { id: 35, name: "완드 킹", image: "wands-king.jpg", suit: "wands", keywords: "리더십, 비전" },
 
-  // 컵(Cups) 수트 - 물의 원소
+  // 컵(Cups) 수트
   { id: 36, name: "컵 에이스", image: "cups-01.jpg", suit: "cups", keywords: "새로운 사랑, 감정" },
   { id: 37, name: "컵 2", image: "cups-02.jpg", suit: "cups", keywords: "파트너십, 연결" },
   { id: 38, name: "컵 3", image: "cups-03.jpg", suit: "cups", keywords: "축하, 우정" },
@@ -73,7 +73,7 @@ const tarotCards = [
   { id: 48, name: "컵 퀸", image: "cups-queen.jpg", suit: "cups", keywords: "공감, 감성" },
   { id: 49, name: "컵 킹", image: "cups-king.jpg", suit: "cups", keywords: "감정 성숙, 외교" },
 
-  // 검(Swords) 수트 - 공기의 원소
+  // 검(Swords) 수트
   { id: 50, name: "검 에이스", image: "swords-01.jpg", suit: "swords", keywords: "명확함, 진실" },
   { id: 51, name: "검 2", image: "swords-02.jpg", suit: "swords", keywords: "결정, 균형" },
   { id: 52, name: "검 3", image: "swords-03.jpg", suit: "swords", keywords: "상처, 슬픔" },
@@ -89,7 +89,7 @@ const tarotCards = [
   { id: 62, name: "검 퀸", image: "swords-queen.jpg", suit: "swords", keywords: "지성, 독립" },
   { id: 63, name: "검 킹", image: "swords-king.jpg", suit: "swords", keywords: "권위, 진실" },
 
-  // 펜타클(Pentacles) 수트 - 땅의 원소
+  // 펜타클(Pentacles) 수트
   { id: 64, name: "펜타클 에이스", image: "pentacles-01.jpg", suit: "pentacles", keywords: "새로운 기회, 번영" },
   { id: 65, name: "펜타클 2", image: "pentacles-02.jpg", suit: "pentacles", keywords: "균형, 적응" },
   { id: 66, name: "펜타클 3", image: "pentacles-03.jpg", suit: "pentacles", keywords: "협력, 기술" },
@@ -120,12 +120,10 @@ app.post('/api/reading', async (c) => {
       return c.json({ error: '카드를 선택해주세요.' }, 400)
     }
 
-    // OpenAI 클라이언트 초기화
     const openai = new OpenAI({
       apiKey: c.env.OPENAI_API_KEY
     })
 
-    // GPT에게 전달할 프롬프트 구성
     const cardDescriptions = cards.map((card: any, index: number) => 
       `${index + 1}. ${card.name} (${card.keywords})`
     ).join('\n')
@@ -191,7 +189,7 @@ app.get('/health', (c) => {
   })
 })
 
-// 메인 페이지
+// 메인 페이지 - GenSpark 스타일
 app.get('/', (c) => {
   return c.html(`
     <!DOCTYPE html>
@@ -199,123 +197,394 @@ app.get('/', (c) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>🔮 AI 타로 상담 - GPT 타로 리더</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <title>🔮 AI 타로 리딩</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
             body {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                background: #000000;
+                color: #FFFFFF;
+                line-height: 1.6;
                 min-height: 100vh;
             }
-            .glass {
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
+            
+            .container {
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 20px 16px;
             }
-            .tarot-card {
-                transition: all 0.3s ease;
+            
+            .header {
+                text-align: center;
+                margin-bottom: 20px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid #333333;
+            }
+            
+            .header h1 {
+                font-size: 16px;
+                font-weight: 700;
+                background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 4px;
+            }
+            
+            .header p {
+                font-size: 12px;
+                color: #CCCCCC;
+            }
+            
+            .section {
+                background: #1a1a1a;
+                border: 1px solid #333333;
+                border-radius: 8px;
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .section-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: #FFFFFF;
+                margin-bottom: 12px;
+            }
+            
+            .input-field {
+                width: 100%;
+                background: #000000;
+                border: 1px solid #333333;
+                border-radius: 8px;
+                padding: 10px 12px;
+                color: #FFFFFF;
+                font-size: 14px;
+                font-family: 'Inter', sans-serif;
+                resize: vertical;
+                transition: border-color 0.2s;
+            }
+            
+            .input-field:focus {
+                outline: none;
+                border-color: #FF6B35;
+            }
+            
+            .input-field::placeholder {
+                color: #666666;
+            }
+            
+            .spread-options {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            .spread-btn {
+                background: #000000;
+                border: 1px solid #333333;
+                border-radius: 8px;
+                padding: 12px;
+                color: #CCCCCC;
+                font-size: 14px;
+                font-weight: 500;
                 cursor: pointer;
+                transition: all 0.2s;
+                text-align: center;
             }
-            .tarot-card:hover {
-                transform: translateY(-10px) scale(1.05);
+            
+            .spread-btn:hover {
+                border-color: #FF6B35;
+                color: #FFFFFF;
             }
-            .tarot-card.selected {
-                border: 3px solid #fbbf24;
-                box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+            
+            .spread-btn.active {
+                background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+                border-color: #FF6B35;
+                color: #FFFFFF;
             }
+            
+            .spread-icon {
+                display: block;
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+            
+            .spread-name {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+            
+            .spread-desc {
+                display: block;
+                font-size: 12px;
+                color: #999999;
+            }
+            
+            .deck-grid {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+            
+            .card-item {
+                aspect-ratio: 2/3;
+                background: #000000;
+                border: 1px solid #333333;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            
+            .card-item:hover {
+                border-color: #FF6B35;
+                transform: scale(1.05);
+            }
+            
+            .card-item.selected {
+                border-color: #FF6B35;
+                background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            }
+            
+            .btn {
+                width: 100%;
+                background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+                border: none;
+                border-radius: 8px;
+                padding: 10px 20px;
+                color: #FFFFFF;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: opacity 0.2s;
+                font-family: 'Inter', sans-serif;
+            }
+            
+            .btn:hover:not(:disabled) {
+                opacity: 0.9;
+            }
+            
+            .btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .btn-secondary {
+                background: #1a1a1a;
+                border: 1px solid #333333;
+            }
+            
+            .btn-secondary:hover:not(:disabled) {
+                background: #000000;
+                opacity: 1;
+            }
+            
+            .card-counter {
+                color: #FF6B35;
+                font-weight: 600;
+            }
+            
+            .selected-cards {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .selected-card {
+                background: #000000;
+                border: 1px solid #333333;
+                border-radius: 8px;
+                padding: 12px;
+            }
+            
+            .card-position {
+                font-size: 12px;
+                color: #FF6B35;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+            
+            .card-name {
+                font-size: 14px;
+                font-weight: 600;
+                color: #FFFFFF;
+                margin-bottom: 2px;
+            }
+            
+            .card-keywords {
+                font-size: 12px;
+                color: #CCCCCC;
+            }
+            
+            .result-question {
+                background: #000000;
+                border: 1px solid #333333;
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .result-question strong {
+                color: #FF6B35;
+                font-size: 12px;
+            }
+            
+            .result-question span {
+                color: #FFFFFF;
+                font-size: 14px;
+            }
+            
+            .result-reading {
+                background: #000000;
+                border: 1px solid #333333;
+                border-radius: 8px;
+                padding: 16px;
+                font-size: 14px;
+                line-height: 1.6;
+                color: #CCCCCC;
+            }
+            
+            .result-reading strong {
+                color: #FF6B35;
+                font-weight: 600;
+            }
+            
+            .result-reading p {
+                margin-bottom: 12px;
+            }
+            
+            .result-reading p:last-child {
+                margin-bottom: 0;
+            }
+            
+            .loading-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+            
+            .loading-content {
+                text-align: center;
+            }
+            
             .loading-spinner {
-                border: 4px solid rgba(255, 255, 255, 0.3);
-                border-top: 4px solid white;
+                width: 40px;
+                height: 40px;
+                border: 3px solid #333333;
+                border-top-color: #FF6B35;
                 border-radius: 50%;
-                width: 50px;
-                height: 50px;
                 animation: spin 1s linear infinite;
+                margin: 0 auto 12px;
             }
+            
             @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
+                to { transform: rotate(360deg); }
+            }
+            
+            .loading-text {
+                font-size: 14px;
+                color: #CCCCCC;
+            }
+            
+            .hidden {
+                display: none;
+            }
+            
+            @media (max-width: 480px) {
+                .deck-grid {
+                    grid-template-columns: repeat(5, 1fr);
+                }
             }
         </style>
     </head>
-    <body class="p-4">
+    <body>
         <!-- 로딩 오버레이 -->
-        <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="glass rounded-lg p-8 text-center">
-                <div class="loading-spinner mx-auto mb-4"></div>
-                <p id="loading-text" class="text-white text-lg">타로 카드를 준비하는 중...</p>
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div id="loading-text" class="loading-text">타로 카드를 준비하는 중...</div>
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto">
+        <div class="container">
             <!-- 헤더 -->
-            <header class="text-center mb-8">
-                <h1 class="text-5xl font-bold text-white mb-2">🔮 AI 타로 상담</h1>
-                <p class="text-xl text-purple-200">GPT가 해석하는 당신의 운명</p>
+            <header class="header">
+                <h1>🔮 AI 타로 리딩</h1>
+                <p>GPT가 해석하는 당신의 운명</p>
             </header>
 
             <!-- 질문 입력 -->
-            <section class="glass rounded-lg p-6 mb-6">
-                <h2 class="text-2xl font-bold text-white mb-4">무엇이 궁금하신가요?</h2>
+            <section id="question-section" class="section">
+                <h2 class="section-title">무엇이 궁금하신가요?</h2>
                 <textarea 
                     id="question-input" 
-                    class="w-full p-4 rounded-lg bg-white bg-opacity-20 text-white placeholder-purple-200 border border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400"
-                    placeholder="예: 나의 연애운은 어떤가요?&#10;예: 이직을 해도 될까요?&#10;예: 오늘 하루는 어떨까요?"
+                    class="input-field"
+                    placeholder="예: 나의 연애운은 어떤가요?
+예: 이직을 해도 될까요?"
                     rows="3"
                 ></textarea>
             </section>
 
             <!-- 스프레드 선택 -->
-            <section class="glass rounded-lg p-6 mb-6">
-                <h2 class="text-2xl font-bold text-white mb-4">리딩 방식 선택</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button class="spread-btn glass rounded-lg p-6 text-white hover:bg-white hover:bg-opacity-20 transition active" data-spread="single" data-count="1">
-                        <div class="text-4xl mb-2">🃏</div>
-                        <div class="text-xl font-bold mb-1">원 카드</div>
-                        <div class="text-sm text-purple-200">간단한 질문</div>
+            <section id="spread-section" class="section">
+                <h2 class="section-title">리딩 방식 선택</h2>
+                <div class="spread-options">
+                    <button class="spread-btn active" data-spread="single" data-count="1">
+                        <span class="spread-icon">🃏</span>
+                        <span class="spread-name">원 카드</span>
+                        <span class="spread-desc">간단한 질문</span>
                     </button>
-                    <button class="spread-btn glass rounded-lg p-6 text-white hover:bg-white hover:bg-opacity-20 transition" data-spread="three-card" data-count="3">
-                        <div class="text-4xl mb-2">🎴</div>
-                        <div class="text-xl font-bold mb-1">쓰리 카드</div>
-                        <div class="text-sm text-purple-200">과거-현재-미래</div>
+                    <button class="spread-btn" data-spread="three-card" data-count="3">
+                        <span class="spread-icon">🎴</span>
+                        <span class="spread-name">쓰리 카드</span>
+                        <span class="spread-desc">과거-현재-미래</span>
                     </button>
                 </div>
             </section>
 
             <!-- 카드 덱 -->
-            <section id="deck-section" class="glass rounded-lg p-6 mb-6 hidden">
-                <h2 class="text-2xl font-bold text-white mb-4">카드를 선택하세요 <span id="card-counter" class="text-yellow-300">(0/1)</span></h2>
-                <div id="deck-container" class="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-13 gap-2 mb-6">
-                    <!-- 카드들이 JavaScript로 생성됨 -->
-                </div>
-                <button id="start-reading-btn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-purple-900 font-bold py-3 px-6 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    타로 리딩 시작하기
-                </button>
+            <section id="deck-section" class="section hidden">
+                <h2 class="section-title">카드를 선택하세요 <span id="card-counter" class="card-counter">(0/1)</span></h2>
+                <div id="deck-container" class="deck-grid"></div>
+                <button id="start-reading-btn" class="btn" disabled>타로 리딩 시작하기</button>
             </section>
 
             <!-- 선택된 카드 -->
-            <section id="selected-section" class="glass rounded-lg p-6 mb-6 hidden">
-                <h2 class="text-2xl font-bold text-white mb-4">선택하신 카드</h2>
-                <div id="selected-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+            <section id="selected-section" class="section hidden">
+                <h2 class="section-title">선택하신 카드</h2>
+                <div id="selected-cards" class="selected-cards"></div>
             </section>
 
             <!-- 리딩 결과 -->
-            <section id="result-section" class="glass rounded-lg p-6 mb-6 hidden">
-                <h2 class="text-2xl font-bold text-white mb-4">타로 리딩 결과</h2>
-                <div class="bg-white bg-opacity-10 rounded-lg p-6">
-                    <div class="mb-4">
-                        <strong class="text-yellow-300">질문:</strong> 
-                        <span id="result-question-text" class="text-white"></span>
-                    </div>
-                    <div id="result-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"></div>
-                    <div id="result-reading" class="text-white leading-relaxed"></div>
-                    <button onclick="location.reload()" class="mt-6 w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-lg transition">
-                        다시 점보기
-                    </button>
+            <section id="result-section" class="section hidden">
+                <h2 class="section-title">타로 리딩 결과</h2>
+                <div class="result-question">
+                    <strong>질문:</strong> <span id="result-question-text"></span>
                 </div>
+                <div id="result-cards" class="selected-cards" style="margin-bottom: 12px;"></div>
+                <div id="result-reading" class="result-reading"></div>
+                <button onclick="location.reload()" class="btn btn-secondary" style="margin-top: 12px;">다시 점보기</button>
             </section>
         </div>
 
         <script>
-            const API_BASE = '';
             let allCards = [];
             let selectedCards = [];
             let requiredCardCount = 1;
@@ -346,15 +615,15 @@ app.get('/', (c) => {
                     
                 } catch (error) {
                     console.error('초기화 오류:', error);
-                    showLoading('❌ 카드를 불러오는데 실패했습니다. 새로고침해주세요.');
+                    showLoading('❌ 카드를 불러오는데 실패했습니다.');
                 }
             }
 
             function setupEventListeners() {
                 spreadButtons.forEach(btn => {
                     btn.addEventListener('click', () => {
-                        spreadButtons.forEach(b => b.classList.remove('active', 'bg-white', 'bg-opacity-20'));
-                        btn.classList.add('active', 'bg-white', 'bg-opacity-20');
+                        spreadButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
                         
                         currentSpread = btn.dataset.spread;
                         requiredCardCount = parseInt(btn.dataset.count);
@@ -377,9 +646,9 @@ app.get('/', (c) => {
                 
                 const shuffled = [...allCards].sort(() => Math.random() - 0.5);
                 
-                shuffled.forEach((card, index) => {
+                shuffled.forEach(card => {
                     const cardElement = document.createElement('div');
-                    cardElement.className = 'tarot-card glass rounded-lg p-2 text-center text-white text-2xl';
+                    cardElement.className = 'card-item';
                     cardElement.dataset.cardId = card.id;
                     cardElement.innerHTML = '🔮';
                     
@@ -415,11 +684,11 @@ app.get('/', (c) => {
                 
                 selectedCards.forEach((card, index) => {
                     const cardDiv = document.createElement('div');
-                    cardDiv.className = 'glass rounded-lg p-4 text-white';
+                    cardDiv.className = 'selected-card';
                     cardDiv.innerHTML = \`
-                        <div class="text-yellow-300 font-bold mb-2">\${getPositionName(index)}</div>
-                        <div class="text-lg font-bold mb-1">\${card.name}</div>
-                        <div class="text-sm text-purple-200">\${card.keywords}</div>
+                        <div class="card-position">\${getPositionName(index)}</div>
+                        <div class="card-name">\${card.name}</div>
+                        <div class="card-keywords">\${card.keywords}</div>
                     \`;
                     selectedCardsContainer.appendChild(cardDiv);
                 });
@@ -486,10 +755,11 @@ app.get('/', (c) => {
                 
                 result.cards.forEach((card, index) => {
                     const cardDiv = document.createElement('div');
-                    cardDiv.className = 'glass rounded-lg p-4 text-white';
+                    cardDiv.className = 'selected-card';
                     cardDiv.innerHTML = \`
-                        <div class="text-yellow-300 font-bold mb-2">\${getPositionName(index)}</div>
-                        <div class="text-lg font-bold">\${card.name}</div>
+                        <div class="card-position">\${getPositionName(index)}</div>
+                        <div class="card-name">\${card.name}</div>
+                        <div class="card-keywords">\${card.keywords}</div>
                     \`;
                     resultCardsContainer.appendChild(cardDiv);
                 });
@@ -502,9 +772,9 @@ app.get('/', (c) => {
 
             function formatReading(text) {
                 return text
-                    .replace(/\\*\\*(.*?)\\*\\*/g, '<strong class="text-yellow-300">$1</strong>')
-                    .replace(/\\n\\n/g, '</p><p class="mb-4">')
-                    .replace(/^/, '<p class="mb-4">')
+                    .replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>')
+                    .replace(/\\n\\n/g, '</p><p>')
+                    .replace(/^/, '<p>')
                     .replace(/$/, '</p>');
             }
 
