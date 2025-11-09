@@ -88,7 +88,9 @@ npm run preview
 
 - **플랫폼**: Cloudflare Pages
 - **프로젝트**: tarot-gpt
-- **상태**: 배포 진행 중
+- **상태**: ✅ 배포 완료 (2025-11-09)
+- **프로덕션 URL**: https://tarot-gpt.pages.dev
+- **GitHub**: https://github.com/ikjoobang/tarot-gpt
 - **비용**: 완전 무료
 
 ## 🔐 환경 변수
